@@ -1,11 +1,13 @@
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sợi Clothing Store</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Nunito:wght@400;600;700&display=swap">
 <style>
-/* Layout: soft and cute. Warm white base, one blush accent, rounded everything, gentle shadows. */
+/* Layout: soft and cute. Warm white base, one blush accent, rounded everything, gentle shadows.
+   Mobile first: one column, big tap targets, floating Zalo button. */
 :root {
   color-scheme: light;
   --paper: #fffaf8;
@@ -13,8 +15,9 @@
   --blush: #f8dfe4;
   --rose: #e48a9d;
   --ink: #5a4a52;
-  --muted: #9a8b91;
+  --muted: #8f8086;
   --line: #f0e2e4;
+  --zalo: #0068ff;
   --font-display: "Baloo 2", "Nunito", system-ui, sans-serif;
   --font-body: "Nunito", -apple-system, "Segoe UI", Roboto, sans-serif;
   --radius: 26px;
@@ -22,12 +25,28 @@
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
+html { scroll-padding-top: 120px; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); line-height: 1.55; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 50; background: var(--blush); }
+a { color: inherit; }
 button { font: inherit; cursor: pointer; color: inherit; }
 button:focus-visible, a:focus-visible { outline: 3px solid var(--rose); outline-offset: 3px; }
 .wrap { max-width: 1140px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 .small { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+h1, h2, h3 { text-wrap: balance; }
+
+/* ── Buttons ── */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: none; border-radius: 999px; padding: 13px 22px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: transform .15s, box-shadow .15s, background .15s; min-height: 48px; }
+.btn:hover { transform: translateY(-2px); }
+.btn-rose { background: var(--rose); color: #fff; box-shadow: 0 8px 20px rgba(228, 138, 157, .35); }
+.btn-ink { background: var(--ink); color: var(--paper); }
+.btn-ink:hover { background: var(--rose); }
+.btn-ink:disabled { opacity: .4; cursor: not-allowed; transform: none; background: var(--ink); }
+.btn-soft { background: var(--blush); color: var(--ink); }
+.btn-zalo { background: var(--zalo); color: #fff; box-shadow: 0 8px 20px rgba(0, 104, 255, .25); }
+.btn-block { width: 100%; }
+.link { color: var(--rose); font-weight: 700; text-decoration: none; white-space: nowrap; }
+.link:hover { text-decoration: underline; }
 
 /* ── Shopify section: announcement-bar ── */
 .ticker { background: var(--blush); color: var(--ink); overflow: hidden; white-space: nowrap; padding-block: 7px; }
@@ -36,31 +55,32 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--rose); outline-
 @keyframes scroll { to { transform: translateX(-50%); } }
 
 /* ── Shopify section: header ── */
-.site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(255, 250, 248, .9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.header-row { display: flex; align-items: center; gap: 20px; padding-block: 14px; }
-.logo { font-family: var(--font-display); font-weight: 600; font-size: 1.8rem; color: var(--ink); text-decoration: none; line-height: 1; }
+.site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(255, 250, 248, .92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.header-row { display: flex; align-items: center; gap: 20px; padding-block: 12px; }
+.logo { font-family: var(--font-display); font-weight: 700; font-size: 1.8rem; color: var(--ink); text-decoration: none; line-height: 1; }
 .logo i { font-style: normal; color: var(--rose); font-size: .8em; margin-left: 2px; }
-.filters { display: flex; gap: 6px; flex: 1; overflow-x: auto; scrollbar-width: none; }
-.filter { border: none; background: transparent; padding: 7px 16px; border-radius: 999px; font-weight: 600; white-space: nowrap; color: var(--muted); transition: background .15s, color .15s; }
-.filter:hover { color: var(--ink); background: var(--cream); }
-.filter.active { background: var(--blush); color: var(--ink); }
-.cart-btn { border: none; background: var(--ink); color: var(--paper); padding: 8px 16px; border-radius: 999px; font-weight: 700; display: flex; gap: 8px; align-items: center; transition: transform .15s; }
-.cart-btn:hover { transform: translateY(-1px); }
+.nav { display: flex; gap: 4px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+.nav a { padding: 8px 14px; border-radius: 999px; font-weight: 700; white-space: nowrap; color: var(--muted); text-decoration: none; transition: background .15s, color .15s; }
+.nav a:hover { color: var(--ink); background: var(--cream); }
+.nav a.active { background: var(--blush); color: var(--ink); }
+.nav a.ws { color: var(--rose); }
+.cart-btn { border: none; background: var(--ink); color: var(--paper); padding: 9px 16px; border-radius: 999px; font-weight: 700; display: flex; gap: 8px; align-items: center; transition: transform .15s; }
 .cart-btn.bump { animation: bump .4s ease; }
 @keyframes bump { 40% { transform: scale(1.1); } }
 .cart-count { background: var(--rose); color: #fff; border-radius: 999px; min-width: 22px; height: 22px; display: inline-grid; place-items: center; font-size: .75rem; padding: 0 6px; }
 
 /* ── Shopify section: hero (image-banner) ── */
-.hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; padding-block: 64px 40px; }
-.hero h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.6rem, 6.5vw, 4.6rem); line-height: 1.02; letter-spacing: -.02em; margin: 12px 0 16px; text-wrap: balance; }
+.hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; padding-block: 56px 32px; }
+.pill { display: inline-flex; gap: 6px; align-items: center; background: var(--blush); color: var(--ink); font-weight: 700; font-size: .85rem; padding: 6px 14px; border-radius: 999px; }
+.hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.5rem, 6.5vw, 4.4rem); line-height: 1.05; margin: 14px 0 14px; }
 .hero h1 em { font-style: normal; color: var(--rose); }
-.hero p { font-size: 1.1rem; max-width: 34ch; margin: 0 0 28px; color: var(--muted); }
-.cta { display: inline-flex; align-items: center; gap: 8px; border: none; background: var(--rose); color: #fff; font-weight: 700; padding: 14px 26px; border-radius: 999px; font-size: 1rem; box-shadow: 0 8px 20px rgba(228, 138, 157, .35); transition: transform .15s, box-shadow .15s; }
-.cta:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(228, 138, 157, .45); }
-.collage { position: relative; height: 400px; max-width: 100%; }
+.hero-grid > div { min-width: 0; }
+.hero p { font-size: 1.1rem; max-width: 36ch; margin: 0 0 24px; color: var(--muted); }
+.hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; }
+.collage { position: relative; height: 380px; max-width: 100%; }
 .blob { position: absolute; inset: 8% 6%; background: var(--blush); border-radius: 46% 54% 52% 48% / 55% 45% 55% 45%; }
 .tile { position: absolute; width: 44%; aspect-ratio: 1; max-width: 100%; background: var(--paper); border-radius: var(--radius); display: grid; place-items: center; box-shadow: var(--shadow); animation: float 6s ease-in-out infinite; }
-.tile svg { width: 60%; height: 60%; }
+.tile svg { width: 62%; height: 62%; }
 .tile:nth-child(2) { left: 4%; top: 10%; rotate: -6deg; }
 .tile:nth-child(3) { right: 4%; top: 2%; rotate: 5deg; animation-delay: -2s; }
 .tile:nth-child(4) { left: 30%; bottom: 2%; rotate: -1deg; animation-delay: -4s; }
@@ -70,102 +90,161 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--rose); outline-
 @keyframes float { 50% { translate: 0 -10px; } }
 @keyframes twinkle { 50% { opacity: .3; transform: scale(.8); } }
 
-/* ── Shopify section: collection-list ── */
-.section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; padding-block: 48px 20px; flex-wrap: wrap; }
-.section-head h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.8rem, 3.6vw, 2.4rem); margin: 0; line-height: 1.1; }
-.collections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.collection { border: none; background: var(--cream); border-radius: var(--radius); padding: 22px; display: flex; align-items: center; gap: 16px; text-align: left; transition: transform .2s, box-shadow .2s, background .2s; }
-.collection:hover { transform: translateY(-3px); box-shadow: var(--shadow); background: var(--blush); }
-.collection svg { width: 64px; height: 64px; flex-shrink: 0; transition: rotate .3s; }
-.collection:hover svg { rotate: -8deg; }
-.collection strong { display: block; font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; line-height: 1.1; }
+/* Retail & wholesale strip */
+.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.mode { background: var(--cream); border-radius: var(--radius); padding: 20px 22px; display: flex; flex-direction: column; gap: 6px; text-decoration: none; transition: background .2s, transform .2s; }
+.mode:hover { background: var(--blush); transform: translateY(-2px); }
+.mode strong { font-family: var(--font-display); font-size: 1.35rem; line-height: 1.1; }
+.mode span { color: var(--muted); font-size: .95rem; }
+
+/* ── Sections ── */
+.section-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; padding-block: 44px 16px; flex-wrap: wrap; }
+.section-head h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.7rem, 3.6vw, 2.3rem); margin: 0; line-height: 1.1; }
+.section-head .sub { display: block; color: var(--muted); font-size: .9rem; font-weight: 600; }
 
 /* ── Shopify section: featured-collection (product grid) ── */
-.grid { display: grid; gap: 24px 18px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); padding-bottom: 72px; }
-.card { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-.card-img { position: relative; aspect-ratio: 4 / 5; max-width: 100%; width: 100%; border: none; background: var(--cream); border-radius: var(--radius); display: grid; place-items: center; padding: 0; transition: transform .2s, box-shadow .2s; }
-.card-img:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.grid { display: grid; gap: 24px 18px; grid-template-columns: repeat(4, 1fr); }
+.grid.all { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); padding-bottom: 56px; }
+.row-scroll { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 23%); gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: thin; }
+.row-scroll .card { scroll-snap-align: start; }
+.card { min-width: 0; display: flex; flex-direction: column; gap: 8px; text-decoration: none; }
+.card-img { position: relative; aspect-ratio: 4 / 5; max-width: 100%; width: 100%; background: var(--cream); border-radius: var(--radius); display: grid; place-items: center; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+.card:hover .card-img { transform: translateY(-4px); box-shadow: var(--shadow); }
 .card-img svg { width: 56%; height: 56%; transition: transform .3s; }
-.card-img:hover svg { transform: rotate(-4deg) scale(1.04); }
-.badge { position: absolute; top: 14px; left: 14px; background: var(--paper); color: var(--rose); font-size: .72rem; font-weight: 700; padding: 4px 11px; border-radius: 999px; }
-.heart { position: absolute; top: 12px; right: 14px; color: var(--rose); font-size: 1.1rem; opacity: .7; }
-.quick { position: absolute; left: 50%; bottom: 14px; translate: -50% 6px; background: var(--paper); border-radius: 999px; padding: 7px 16px; font-weight: 700; font-size: .82rem; box-shadow: var(--shadow); opacity: 0; transition: opacity .2s, translate .2s; white-space: nowrap; }
-.card-img:hover .quick, .card-img:focus-visible .quick { opacity: 1; translate: -50% 0; }
-.card-row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; padding-inline: 4px; }
-.card h3 { margin: 0; font-size: 1rem; font-weight: 700; }
-.price { font-weight: 600; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.card-img img { width: 100%; height: 100%; object-fit: cover; }
+.card:hover .card-img svg { transform: rotate(-4deg) scale(1.04); }
+.badge { position: absolute; top: 12px; left: 12px; background: var(--paper); color: var(--rose); font-size: .72rem; font-weight: 700; padding: 4px 11px; border-radius: 999px; }
+.card h3 { margin: 0; font-size: 1rem; font-weight: 700; line-height: 1.3; padding-inline: 4px; }
+.price { font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; padding-inline: 4px; }
 .dots { display: flex; gap: 6px; padding-inline: 4px; }
 .dot { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(90, 74, 82, .2); }
 
-/* ── Shopify section: main-product (quick view) ── */
-.modal { border: none; border-radius: var(--radius); padding: 0; width: min(800px, 92vw); background: var(--paper); color: var(--ink); box-shadow: 0 20px 50px rgba(90, 74, 82, .2); }
-.modal::backdrop { background: rgba(90, 74, 82, .35); backdrop-filter: blur(3px); }
-.modal-body { display: grid; grid-template-columns: 1fr 1fr; }
-.modal-img { display: grid; place-items: center; aspect-ratio: 1; max-width: 100%; background: var(--cream); }
-.modal-img svg { width: 60%; height: 60%; }
-.modal-info { padding: 34px 28px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.modal-info h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.9rem; line-height: 1.1; margin: 0; }
-.modal-info p { color: var(--muted); margin: 0; }
-.label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-top: 8px; }
+/* ── Wholesale banner ── */
+.ws-banner { margin-top: 56px; background: var(--blush); border-radius: var(--radius); padding: 36px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; align-items: center; }
+.ws-banner h2 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.05; margin: 6px 0 10px; }
+.ws-banner p { margin: 0; color: var(--ink); max-width: 46ch; }
+.ws-actions { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── Contact / Zalo ── */
+.contact { margin-block: 56px 72px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.contact h2 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.1; margin: 0 0 8px; }
+.contact p { margin: 0 0 18px; color: var(--muted); }
+.info { background: var(--cream); border-radius: var(--radius); padding: 22px; display: grid; gap: 14px; }
+.info div { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-bottom: 1px dashed var(--line); padding-bottom: 12px; }
+.info div:last-child { border-bottom: none; padding-bottom: 0; }
+.info dt { font-weight: 700; margin: 0; }
+.info dd { margin: 0; color: var(--muted); }
+.todo { color: var(--rose); font-style: italic; }
+
+/* ── Breadcrumb / page head ── */
+.crumbs { display: flex; gap: 6px; flex-wrap: wrap; font-size: .85rem; color: var(--muted); padding-top: 20px; }
+.crumbs a { text-decoration: none; font-weight: 600; }
+.crumbs a:hover { color: var(--rose); }
+
+/* ── Shopify section: main-product ── */
+.pdp { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; padding-block: 20px 64px; align-items: start; }
+.gallery { display: grid; gap: 12px; min-width: 0; }
+.main-img { position: relative; aspect-ratio: 4 / 5; max-width: 100%; background: var(--cream); border-radius: var(--radius); display: grid; place-items: center; overflow: hidden; }
+.main-img svg { width: 58%; height: 58%; }
+.main-img img { width: 100%; height: 100%; object-fit: cover; }
+.ph-note { position: absolute; bottom: 12px; left: 50%; translate: -50% 0; background: var(--paper); color: var(--muted); font-size: .75rem; font-weight: 600; padding: 4px 12px; border-radius: 999px; white-space: nowrap; }
+.thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.thumb { aspect-ratio: 1; max-width: 100%; border: 2px solid transparent; background: var(--cream); border-radius: 16px; display: grid; place-items: center; padding: 0; overflow: hidden; }
+.thumb svg { width: 60%; height: 60%; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.thumb.selected { border-color: var(--rose); }
+.buy { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.buy h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.1; margin: 0; }
+.code { color: var(--muted); font-size: .85rem; font-weight: 600; }
+.retail { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.retail strong { font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+.retail span { color: var(--muted); font-size: .9rem; }
+.label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-top: 6px; }
 .options { display: flex; gap: 8px; flex-wrap: wrap; }
-.size { border: 1.5px solid var(--line); background: var(--paper); min-width: 48px; padding: 8px 10px; border-radius: 14px; font-weight: 600; transition: border-color .15s, background .15s; }
+.size { border: 1.5px solid var(--line); background: var(--paper); min-width: 52px; min-height: 44px; padding: 8px 12px; border-radius: 14px; font-weight: 700; transition: border-color .15s, background .15s; }
 .size:hover { border-color: var(--rose); }
 .size.selected { background: var(--blush); border-color: var(--rose); }
-.swatch { width: 32px; height: 32px; border-radius: 50%; border: none; box-shadow: inset 0 0 0 1px rgba(90, 74, 82, .2); }
+.swatch { width: 38px; height: 38px; border-radius: 50%; border: none; box-shadow: inset 0 0 0 1px rgba(90, 74, 82, .2); }
 .swatch.selected { box-shadow: inset 0 0 0 1px rgba(90, 74, 82, .2), 0 0 0 3px var(--paper), 0 0 0 5px var(--rose); }
-.primary { border: none; background: var(--ink); color: var(--paper); padding: 14px 16px; border-radius: 999px; width: 100%; margin-top: 12px; font-weight: 700; transition: background .15s; }
-.primary:hover:not(:disabled) { background: var(--rose); }
-.primary:disabled { opacity: .4; cursor: not-allowed; }
-.sku { font-size: .75rem; color: var(--muted); }
-.close { position: absolute; top: 10px; right: 14px; z-index: 2; border: none; background: transparent; font-size: 1.9rem; line-height: 1; color: var(--muted); }
+.desc { color: var(--ink); margin: 4px 0 0; }
+.buy-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.ws-box { margin-top: 10px; border: 1.5px dashed var(--rose); border-radius: 20px; padding: 18px; display: grid; gap: 10px; }
+.ws-box strong { font-family: var(--font-display); font-size: 1.2rem; line-height: 1.1; }
+.ws-box p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+/* ── Wholesale page ── */
+.ws-head { background: var(--blush); border-radius: var(--radius); padding: 40px 32px; margin-top: 16px; }
+.ws-head h1 { font-family: var(--font-display); font-size: clamp(2.2rem, 5.5vw, 3.6rem); line-height: 1.05; margin: 10px 0 12px; }
+.ws-head p { margin: 0 0 22px; max-width: 52ch; }
+.steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; counter-reset: s; }
+.steps li { background: var(--cream); border-radius: var(--radius); padding: 22px; counter-increment: s; }
+.steps li::before { content: counter(s); display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--rose); color: #fff; font-weight: 700; margin-bottom: 10px; }
+.steps strong { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+.steps span { color: var(--muted); font-size: .95rem; }
+.ws-cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding-bottom: 64px; }
+.ws-cat { background: var(--cream); border-radius: var(--radius); padding: 18px 20px; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background .2s; }
+.ws-cat:hover { background: var(--blush); }
+.ws-cat svg { width: 52px; height: 52px; flex-shrink: 0; }
+.ws-cat strong { display: block; font-size: 1.1rem; }
+.ws-cat span { color: var(--muted); font-size: .85rem; }
 
 /* ── Shopify section: cart-drawer ── */
 .overlay { position: fixed; inset: 0; background: rgba(90, 74, 82, .3); backdrop-filter: blur(2px); z-index: 30; }
 .drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 31; width: min(400px, 100vw); background: var(--paper); border-radius: var(--radius) 0 0 var(--radius); display: flex; flex-direction: column; box-shadow: -10px 0 40px rgba(90, 74, 82, .15); padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); padding-right: env(safe-area-inset-right, 0px); animation: slide .25s ease; }
 @keyframes slide { from { transform: translateX(100%); } }
-.drawer-head { position: relative; padding: 22px 24px 16px; }
-.drawer-head h2 { font-family: var(--font-display); font-weight: 600; margin: 0; font-size: 1.5rem; }
+.drawer-head { position: relative; padding: 22px 24px 12px; }
+.drawer-head h2 { font-family: var(--font-display); font-weight: 700; margin: 0; font-size: 1.5rem; }
+.close { position: absolute; top: 14px; right: 16px; border: none; background: transparent; font-size: 1.9rem; line-height: 1; color: var(--muted); width: 44px; height: 44px; }
 .cart-items { list-style: none; margin: 0; padding: 0 24px; flex: 1; overflow-y: auto; }
 .cart-item { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
-.cart-thumb { width: 60px; height: 60px; background: var(--cream); border-radius: 16px; display: grid; place-items: center; flex-shrink: 0; }
+.cart-thumb { width: 60px; height: 60px; background: var(--cream); border-radius: 16px; display: grid; place-items: center; flex-shrink: 0; overflow: hidden; }
 .cart-thumb svg { width: 62%; height: 62%; }
 .cart-meta { flex: 1; min-width: 0; font-weight: 700; font-size: .95rem; }
 .cart-meta small { display: block; color: var(--muted); font-weight: 400; font-size: .8rem; }
 .qty { display: flex; align-items: center; gap: 8px; font-variant-numeric: tabular-nums; font-weight: 700; }
-.qty button { width: 28px; height: 28px; border: none; background: var(--cream); border-radius: 50%; }
+.qty button { width: 32px; height: 32px; border: none; background: var(--cream); border-radius: 50%; }
 .qty button:hover { background: var(--blush); }
 .empty { color: var(--muted); padding: 32px 0; text-align: center; }
-.progress { margin: 0 24px 8px; padding: 12px 14px; background: var(--cream); border-radius: 16px; font-size: .85rem; }
-.bar { height: 6px; background: var(--paper); border-radius: 999px; margin-top: 8px; overflow: hidden; }
-.bar i { display: block; height: 100%; background: var(--rose); border-radius: 999px; transition: width .3s; }
-.drawer-foot { padding: 20px 24px; border-top: 1px solid var(--line); }
+.drawer-foot { padding: 18px 24px; border-top: 1px solid var(--line); display: grid; gap: 10px; }
 .total-row { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.05rem; }
+.foot-note { color: var(--muted); font-size: .82rem; margin: 0; }
+
+/* ── Floating Zalo button ── */
+.zalo-float { position: fixed; z-index: 25; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 8px; background: var(--zalo); color: #fff; text-decoration: none; font-weight: 700; padding: 12px 18px; border-radius: 999px; box-shadow: 0 10px 24px rgba(0, 104, 255, .35); }
+.zalo-float b { background: #fff; color: var(--zalo); border-radius: 8px; padding: 0 6px; font-size: .8rem; }
 
 /* ── Shopify section: footer ── */
-.footer { background: var(--cream); padding-block: 36px; }
+.footer { background: var(--cream); padding-block: 32px 96px; }
 .footer-row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center; }
 .footer p { margin: 0; color: var(--muted); font-size: .85rem; }
 
-.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); background: var(--ink); color: var(--paper); padding: 10px 20px; border-radius: 999px; opacity: 0; pointer-events: none; transition: all .25s ease; z-index: 40; font-weight: 600; box-shadow: var(--shadow); }
+.toast { position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); background: var(--ink); color: var(--paper); padding: 10px 20px; border-radius: 999px; opacity: 0; pointer-events: none; transition: all .25s ease; z-index: 40; font-weight: 600; box-shadow: var(--shadow); max-width: calc(100vw - 32px); text-align: center; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
-@media (max-width: 760px) {
-  .header-row { flex-wrap: wrap; gap: 8px; }
-  .logo { flex: 1; }
-  .filters { order: 3; flex-basis: 100%; }
-  .hero-grid { grid-template-columns: 1fr; padding-block: 36px 16px; gap: 24px; }
-  .collage { height: 290px; }
-  .collections { grid-template-columns: 1fr; gap: 10px; }
-  .collection { padding: 16px 18px; }
-  .collection svg { width: 48px; height: 48px; }
+@media (max-width: 860px) {
   .grid { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
-  .quick { display: none; }
-  .modal-body { grid-template-columns: 1fr; }
-  .modal-img { aspect-ratio: 2 / 1; }
-  .modal-info { padding: 20px; }
+  .row-scroll { grid-auto-columns: 44%; gap: 12px; }
+  .pdp { grid-template-columns: 1fr; gap: 20px; }
+  .ws-banner, .contact { grid-template-columns: 1fr; }
+  .steps, .ws-cats { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .header-row { flex-wrap: wrap; gap: 6px; }
+  .logo { flex: 1; }
+  .nav { order: 3; flex-basis: 100%; justify-content: space-between; gap: 2px; }
+  .nav a { padding: 8px 10px; font-size: .95rem; }
+  .hero-grid { grid-template-columns: 1fr; padding-block: 28px 8px; gap: 20px; }
+  .collage { height: 250px; }
+  .hero-ctas .btn { flex: 1; }
+  .modes { grid-template-columns: 1fr; gap: 10px; }
+  .grid.all { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
+  .ws-banner { padding: 26px 22px; }
+  .ws-head { padding: 28px 22px; }
+  .buy-actions { grid-template-columns: 1fr; }
+  .zalo-float span { display: none; }
 }
 </style>
 
@@ -174,51 +253,26 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--rose); outline-
 <header class="site-header">
   <div class="wrap header-row">
     <a class="logo" href="#">sợi<i>♡</i></a>
-    <nav class="filters" aria-label="Collections">
-      <button class="filter active" data-cat="all">Tất cả</button>
-      <button class="filter" data-cat="Tees">Áo thun</button>
-      <button class="filter" data-cat="Dresses">Đầm</button>
-      <button class="filter" data-cat="Pants">Quần</button>
+    <nav class="nav" id="nav" aria-label="Danh mục">
+      <a href="#ao-kieu" data-route="ao-kieu">Áo kiểu</a>
+      <a href="#ao-thun" data-route="ao-thun">Áo thun</a>
+      <a href="#ao-so-mi" data-route="ao-so-mi">Sơ mi</a>
+      <a href="#ban-si" data-route="ban-si" class="ws">Bán sỉ</a>
     </nav>
     <button class="cart-btn" id="cartBtn" aria-label="Mở giỏ hàng">Giỏ hàng <span class="cart-count" id="cartCount">0</span></button>
   </div>
 </header>
 
-<main>
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <span class="small">Bộ sưu tập hè · may tại Sài Gòn</span>
-        <h1>Mềm mại, xinh xắn, <em>mặc mỗi ngày</em></h1>
-        <p>Áo thun thoáng mát, đầm linen và quần dễ mặc, may số lượng nhỏ tại Quận 3.</p>
-        <button class="cta" id="shopNow">Mua ngay ♡</button>
-      </div>
-      <div class="collage" id="collage"></div>
-    </div>
-  </section>
-
-  <section class="wrap">
-    <div class="section-head"><h2>Mua theo danh mục</h2><span class="small" id="productTotal"></span></div>
-    <div class="collections" id="collections"></div>
-  </section>
-
-  <section class="wrap" id="shop">
-    <div class="section-head"><h2 id="gridTitle">Tất cả sản phẩm</h2><span class="small">Giá tính bằng VNĐ</span></div>
-    <div class="grid" id="productGrid" aria-live="polite"></div>
-  </section>
-</main>
+<main id="app"></main>
 
 <footer class="footer">
   <div class="wrap footer-row">
-    <span class="logo">sợi<i>♡</i></span>
-    <p>Bản demo ý tưởng · dữ liệu sản phẩm và giỏ hàng theo chuẩn Shopify</p>
+    <a class="logo" href="#">sợi<i>♡</i></a>
+    <p>Thời trang nữ · Bán lẻ &amp; Bán sỉ · Áo kiểu, áo thun, áo sơ mi</p>
   </div>
 </footer>
 
-<dialog class="modal" id="productModal">
-  <button class="close" id="modalClose" aria-label="Đóng">×</button>
-  <div class="modal-body" id="modalBody"></div>
-</dialog>
+<a class="zalo-float" id="zaloFloat" aria-label="Nhắn Zalo đặt hàng"><b>Zalo</b><span>Nhắn đặt hàng</span></a>
 
 <div class="overlay" id="overlay" hidden></div>
 <aside class="drawer" id="cartDrawer" aria-label="Giỏ hàng" hidden>
@@ -226,11 +280,11 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--rose); outline-
     <h2>Giỏ hàng của bạn</h2>
     <button class="close" id="drawerClose" aria-label="Đóng giỏ hàng">×</button>
   </div>
-  <div class="progress" id="progress"></div>
   <ul class="cart-items" id="cartItems"></ul>
   <div class="drawer-foot">
     <div class="total-row"><span>Tạm tính</span><strong id="cartTotal">0₫</strong></div>
-    <button class="primary" id="checkoutBtn">Thanh toán</button>
+    <a class="btn btn-zalo btn-block" id="checkoutBtn">Gửi đơn qua Zalo</a>
+    <p class="foot-note">Thông tin đơn hàng sẽ được sao chép. Mở Zalo và dán vào tin nhắn để gửi cho shop.</p>
   </div>
 </aside>
 
@@ -238,268 +292,379 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--rose); outline-
 
 <script>
 /* =====================================================================
-   DATA — shaped like Shopify's Product object (Storefront API / products.json)
-   so moving to Shopify later is mostly a copy-paste:
-   - product_type  → Shopify "Type" (used here as the collection)
-   - options       → Shopify product options (Color, Size)
-   - variants      → generated below: one per Color × Size, each with id/sku/price
-   - swatches      → in Shopify, store these as a color metafield or swatch
+   1. THÔNG TIN SHOP — điền thông tin thật vào đây
    ===================================================================== */
-const PRODUCTS = [
-  { id: 1, handle: "ao-thun-cotton-co-ban", title: "Áo thun cotton cơ bản", product_type: "Tees", tags: ["bestseller"],
-    price: "290000", body_html: "Cotton 100% dày dặn, form rộng thoải mái. Chiếc áo bạn sẽ muốn mặc mỗi ngày.",
-    options: [{ name: "Màu", values: ["Trắng", "Hồng phấn", "Be"] }, { name: "Kích cỡ", values: ["S", "M", "L", "XL"] }],
-    swatches: { "Trắng": "#ffffff", "Hồng phấn": "#f6cfd6", "Be": "#ebdfcc" } },
-  { id: 2, handle: "ao-thun-tui-nguc-boxy", title: "Áo thun túi ngực form boxy", product_type: "Tees", tags: ["new"],
-    price: "320000", body_html: "Form boxy dáng lửng, có túi ngực. Nhuộm sau khi may nên vải mềm và có cảm giác đã mặc quen.",
-    options: [{ name: "Màu", values: ["Vàng bơ", "Xanh lá nhạt", "Kem"] }, { name: "Kích cỡ", values: ["S", "M", "L", "XL"] }],
-    swatches: { "Vàng bơ": "#f7e7b4", "Xanh lá nhạt": "#cbd8c3", "Kem": "#f7f0e4" } },
-  { id: 3, handle: "ao-thun-in-hinh-sai-gon", title: "Áo thun in hình Sài Gòn", product_type: "Tees", tags: [],
-    price: "350000", body_html: "Form oversize, in hình thành phố nhỏ xinh sau lưng. Thoáng mát cho những ngày oi ẩm.",
-    options: [{ name: "Màu", values: ["Xanh baby", "Trắng"] }, { name: "Kích cỡ", values: ["S", "M", "L"] }],
-    swatches: { "Xanh baby": "#cfe0f3", "Trắng": "#ffffff" } },
-  { id: 4, handle: "dam-linen-quan-midi", title: "Đầm linen dáng quấn midi", product_type: "Dresses", tags: ["bestseller"],
-    price: "890000", body_html: "Đầm linen wash dáng quấn, thắt nơ ở eo. Dài vừa qua gối.",
-    options: [{ name: "Màu", values: ["Hồng", "Trắng ngà", "Xanh lá nhạt"] }, { name: "Kích cỡ", values: ["S", "M", "L"] }],
-    swatches: { "Hồng": "#eab3bf", "Trắng ngà": "#f8f2e6", "Xanh lá nhạt": "#cbd8c3" } },
-  { id: 5, handle: "dam-hai-day-satin", title: "Đầm hai dây satin", product_type: "Dresses", tags: ["new"],
-    price: "690000", body_html: "Đầm satin cắt xéo, dây vai điều chỉnh được. Đi chơi hay đi tiệc đều xinh.",
-    options: [{ name: "Màu", values: ["Sâm panh", "Tím lilac"] }, { name: "Kích cỡ", values: ["XS", "S", "M", "L"] }],
-    swatches: { "Sâm panh": "#efdcc0", "Tím lilac": "#ddd0ec" } },
-  { id: 6, handle: "dam-cotton-mua-he", title: "Đầm cotton mùa hè", product_type: "Dresses", tags: [],
-    price: "590000", body_html: "Vải cotton poplin nhẹ, chân váy xòe. Hợp cho những buổi chiều nắng.",
-    options: [{ name: "Màu", values: ["Vàng bơ", "Xanh baby"] }, { name: "Kích cỡ", values: ["S", "M", "L"] }],
-    swatches: { "Vàng bơ": "#f7e7b4", "Xanh baby": "#cfe0f3" } },
-  { id: 7, handle: "quan-ong-suong", title: "Quần ống suông thoải mái", product_type: "Pants", tags: [],
-    price: "590000", body_html: "Lưng vừa, ống suông, vải cotton twill mềm. Lưng sau có thun nên mặc rất dễ chịu.",
-    options: [{ name: "Màu", values: ["Be", "Nâu mocha"] }, { name: "Kích cỡ", values: ["28", "30", "32", "34"] }],
-    swatches: { "Be": "#ebdfcc", "Nâu mocha": "#c9ad9a" } },
-  { id: 8, handle: "quan-linen-day-rut", title: "Quần linen dây rút", product_type: "Pants", tags: ["new"],
-    price: "650000", body_html: "Quần linen ống rộng, lưng dây rút. Mát mẻ và dễ mặc.",
-    options: [{ name: "Màu", values: ["Kem", "Hồng"] }, { name: "Kích cỡ", values: ["S", "M", "L"] }],
-    swatches: { "Kem": "#f7f0e4", "Hồng": "#eab3bf" } },
+const SHOP = {
+  zalo: "",                      // Số Zalo, ví dụ "0901234567". Để trống = hiện "đang cập nhật"
+  zaloName: "",                  // Tên tài khoản Zalo (không bắt buộc)
+  hours: "",                     // Giờ làm việc, ví dụ "8:00 – 21:00, Thứ 2 – Chủ nhật"
+  address: "",                   // Địa chỉ cửa hàng / kho
+};
+const TODO = `<span class="todo">Đang cập nhật</span>`;
+
+/* =====================================================================
+   2. DANH MỤC — 3 danh mục chính
+   ===================================================================== */
+const CATS = [
+  { slug: "ao-kieu",  type: "Áo kiểu",      en: "Women's tops & blouses", icon: "blouse", color: "#f6cfd6" },
+  { slug: "ao-thun",  type: "Áo thun nữ",   en: "Women's T-shirts",       icon: "tee",    color: "#cfe0f3" },
+  { slug: "ao-so-mi", type: "Áo sơ mi nữ",  en: "Women's shirts",         icon: "shirt",  color: "#ebdfcc" },
 ];
 
-// More products, same Shopify shape, built with a small helper
+/* =====================================================================
+   3. SẢN PHẨM — dữ liệu theo cấu trúc sản phẩm Shopify.
+   Thay ảnh thật: thêm đường dẫn ảnh vào images: ["anh-1.jpg", "anh-2.jpg"]
+   Giá đang là GIÁ MẪU — thay bằng giá lẻ thật (đơn vị VNĐ).
+   Không có giá sỉ ở đây: giá sỉ báo riêng qua Zalo.
+   ===================================================================== */
 const PALETTE = {
   "Trắng": "#ffffff", "Hồng phấn": "#f6cfd6", "Be": "#ebdfcc", "Vàng bơ": "#f7e7b4", "Xanh lá nhạt": "#cbd8c3",
   "Kem": "#f7f0e4", "Xanh baby": "#cfe0f3", "Hồng": "#eab3bf", "Trắng ngà": "#f8f2e6", "Sâm panh": "#efdcc0",
   "Tím lilac": "#ddd0ec", "Nâu mocha": "#c9ad9a", "Xám tro": "#dedad6", "Đào": "#f8d3c0", "Xanh mint": "#cdeee0", "Than chì": "#7a6d74",
 };
-const addProduct = (id, handle, title, product_type, tags, price, body_html, colors, sizes) => PRODUCTS.push({
-  id, handle, title, product_type, tags, price, body_html,
+const SIZES = ["S", "M", "L", "XL"];
+const FREE = ["Free size"];
+
+const PRODUCTS = [];
+const add = (id, handle, title, product_type, tags, price, body_html, colors, sizes, images = []) => PRODUCTS.push({
+  id, handle, title, product_type, tags, price, body_html, images,
   options: [{ name: "Màu", values: colors }, { name: "Kích cỡ", values: sizes }],
-  swatches: Object.fromEntries(colors.map((c) => [c, PALETTE[c]])),
+  swatches: Object.fromEntries(colors.map((c) => [c, PALETTE[c] || "#eeeeee"])),
 });
-const TOPS = ["S", "M", "L", "XL"], DRESS = ["S", "M", "L"], WAIST = ["26", "28", "30", "32"];
 
-// Áo thun (7 more → 10)
-addProduct(9,  "ao-baby-tee", "Áo baby tee ôm nhẹ", "Tees", ["new"], "260000", "Form ôm nhẹ, dáng lửng xinh xắn. Cotton co giãn mềm mại.", ["Hồng phấn", "Trắng", "Tím lilac"], TOPS);
-addProduct(10, "ao-thun-co-tim", "Áo thun cổ tim basic", "Tees", [], "270000", "Cổ tim nhẹ nhàng, vải cotton thoáng. Dễ phối với mọi thứ.", ["Kem", "Đào", "Xám tro"], TOPS);
-addProduct(11, "ao-thun-soc-nho", "Áo thun sọc nhỏ", "Tees", [], "330000", "Sọc nhỏ kiểu Pháp, form suông. Mặc đi học, đi làm đều hợp.", ["Xanh baby", "Hồng"], TOPS);
-addProduct(12, "ao-thun-theu-hoa-nhi", "Áo thun thêu hoa nhí", "Tees", ["bestseller"], "380000", "Thêu hoa nhí nhỏ trên ngực. Cotton 100% mềm và thoáng.", ["Trắng", "Vàng bơ"], TOPS);
-addProduct(13, "ao-thun-tay-lo-oversize", "Áo thun tay lỡ oversize", "Tees", [], "340000", "Form rộng tay lỡ, vải dày vừa. Mặc một mình hay khoác ngoài đều đẹp.", ["Xám tro", "Kem", "Than chì"], TOPS);
-addProduct(14, "ao-thun-gan-tam", "Áo thun gân tăm", "Tees", ["new"], "290000", "Vải gân tăm co giãn, ôm vừa người. Cổ tròn nhỏ gọn.", ["Đào", "Xanh mint", "Trắng"], TOPS);
-addProduct(15, "ao-thun-in-chu-soi", "Áo thun in chữ sợi", "Tees", [], "350000", "In chữ sợi♡ nhỏ trước ngực. Form suông, mặc thoải mái cả ngày.", ["Kem", "Hồng phấn"], TOPS);
+// Áo kiểu
+add(101, "ao-kieu-tay-phong-co-vuong", "Áo kiểu tay phồng cổ vuông", "Áo kiểu", ["new"], "320000", "Tay phồng nhẹ, cổ vuông nữ tính. Vải voan có lót trong, mặc đi làm hay đi chơi đều xinh.", ["Hồng phấn", "Trắng", "Kem"], SIZES);
+add(102, "ao-kieu-peplum-that-no", "Áo kiểu peplum thắt nơ", "Áo kiểu", ["bestseller"], "350000", "Dáng peplum chiết eo, thắt nơ sau lưng. Tôn dáng mà vẫn thoải mái.", ["Trắng", "Tím lilac"], SIZES);
+add(103, "ao-kieu-co-beo", "Áo kiểu cổ bèo", "Áo kiểu", [], "330000", "Cổ bèo nhún mềm mại, tay lửng. Vải lụa nhẹ, ít nhăn.", ["Kem", "Vàng bơ"], SIZES);
+add(104, "ao-kieu-croptop-tay-canh-tien", "Áo kiểu croptop tay cánh tiên", "Áo kiểu", ["new"], "290000", "Dáng croptop, tay cánh tiên bay nhẹ. Hợp phối với chân váy hoặc quần lưng cao.", ["Hồng", "Xanh baby"], FREE);
+add(105, "ao-kieu-co-no-cong-so", "Áo kiểu cổ nơ công sở", "Áo kiểu", [], "360000", "Cổ thắt nơ thanh lịch, tay dài. Hợp cho các nàng công sở.", ["Trắng", "Be", "Than chì"], SIZES);
+add(106, "ao-kieu-hai-day-ren", "Áo kiểu hai dây viền ren", "Áo kiểu", [], "280000", "Hai dây viền ren nhỏ. Mặc riêng hoặc mặc trong áo khoác đều xinh.", ["Trắng ngà", "Hồng phấn"], FREE);
+add(107, "ao-kieu-tre-vai", "Áo kiểu trễ vai", "Áo kiểu", ["new"], "310000", "Trễ vai có chun, khoe xương quai xanh nhẹ nhàng.", ["Trắng", "Đào"], SIZES);
+add(108, "ao-kieu-voan-hoa-nhi", "Áo kiểu voan hoa nhí", "Áo kiểu", [], "340000", "Voan hoa nhí mềm, tay ngắn bồng nhẹ. Mát cho ngày nắng.", ["Vàng bơ", "Xanh mint"], SIZES);
+add(109, "ao-kieu-tay-bong-co-sen", "Áo kiểu tay bồng cổ sen", "Áo kiểu", ["bestseller"], "330000", "Cổ sen bo tròn, tay bồng. Phong cách tiểu thư nhẹ nhàng.", ["Trắng", "Hồng phấn"], SIZES);
+add(110, "ao-kieu-linen-cai-no", "Áo kiểu linen cài nơ", "Áo kiểu", [], "370000", "Linen thoáng, cài nơ phía trước. Mặc đi làm, đi cà phê đều hợp.", ["Be", "Xanh lá nhạt"], SIZES);
 
-// Đầm (7 more → 10)
-addProduct(16, "dam-babydoll-tay-phong", "Đầm babydoll tay phồng", "Dresses", ["new"], "650000", "Dáng babydoll, tay phồng nhẹ. Xinh xắn mà vẫn thoải mái.", ["Hồng phấn", "Trắng"], DRESS);
-addProduct(17, "dam-so-mi-dang-dai", "Đầm sơ mi dáng dài", "Dresses", [], "720000", "Đầm sơ mi cotton dáng dài, có đai eo. Đi làm hay đi chơi đều hợp.", ["Xanh baby", "Be"], DRESS);
-addProduct(18, "dam-hoa-nhi-co-vuong", "Đầm hoa nhí cổ vuông", "Dresses", ["bestseller"], "690000", "Vải hoa nhí, cổ vuông, chân váy xòe nhẹ.", ["Vàng bơ", "Đào"], DRESS);
-addProduct(19, "dam-thun-suong", "Đầm thun suông", "Dresses", [], "450000", "Đầm thun cotton dáng suông. Ở nhà hay ra phố đều tiện.", ["Xám tro", "Than chì", "Kem"], DRESS);
-addProduct(20, "dam-yem-linen", "Đầm yếm linen", "Dresses", [], "620000", "Đầm yếm linen có túi trước. Phối cùng áo thun là xinh.", ["Be", "Xanh lá nhạt"], DRESS);
-addProduct(21, "dam-nhun-eo-dang-xoe", "Đầm nhún eo dáng xòe", "Dresses", ["new"], "680000", "Nhún eo, chân váy xòe tầng. Nhẹ và bay khi bước đi.", ["Tím lilac", "Xanh mint"], DRESS);
-addProduct(22, "dam-len-tam-tay-dai", "Đầm len tăm tay dài", "Dresses", [], "760000", "Len tăm mỏng, ôm nhẹ. Hợp những ngày trời mát.", ["Kem", "Nâu mocha"], DRESS);
+// Áo thun nữ
+add(1,  "ao-thun-cotton-co-ban", "Áo thun cotton cơ bản", "Áo thun nữ", ["bestseller"], "290000", "Cotton 100% dày dặn, form rộng thoải mái. Chiếc áo bạn sẽ muốn mặc mỗi ngày.", ["Trắng", "Hồng phấn", "Be"], SIZES);
+add(2,  "ao-thun-tui-nguc-boxy", "Áo thun túi ngực form boxy", "Áo thun nữ", ["new"], "320000", "Form boxy dáng lửng, có túi ngực. Nhuộm sau khi may nên vải mềm như đã mặc quen.", ["Vàng bơ", "Xanh lá nhạt", "Kem"], SIZES);
+add(3,  "ao-thun-in-hinh-sai-gon", "Áo thun in hình Sài Gòn", "Áo thun nữ", [], "350000", "Form oversize, in hình thành phố nhỏ xinh sau lưng. Thoáng mát cho những ngày oi ẩm.", ["Xanh baby", "Trắng"], SIZES);
+add(9,  "ao-baby-tee", "Áo baby tee ôm nhẹ", "Áo thun nữ", ["new"], "260000", "Form ôm nhẹ, dáng lửng xinh xắn. Cotton co giãn mềm mại.", ["Hồng phấn", "Trắng", "Tím lilac"], SIZES);
+add(10, "ao-thun-co-tim", "Áo thun cổ tim basic", "Áo thun nữ", [], "270000", "Cổ tim nhẹ nhàng, vải cotton thoáng. Dễ phối với mọi thứ.", ["Kem", "Đào", "Xám tro"], SIZES);
+add(11, "ao-thun-soc-nho", "Áo thun sọc nhỏ", "Áo thun nữ", [], "330000", "Sọc nhỏ kiểu Pháp, form suông. Mặc đi học, đi làm đều hợp.", ["Xanh baby", "Hồng"], SIZES);
+add(12, "ao-thun-theu-hoa-nhi", "Áo thun thêu hoa nhí", "Áo thun nữ", ["bestseller"], "380000", "Thêu hoa nhí nhỏ trên ngực. Cotton 100% mềm và thoáng.", ["Trắng", "Vàng bơ"], SIZES);
+add(13, "ao-thun-tay-lo-oversize", "Áo thun tay lỡ oversize", "Áo thun nữ", [], "340000", "Form rộng tay lỡ, vải dày vừa. Mặc một mình hay khoác ngoài đều đẹp.", ["Xám tro", "Kem", "Than chì"], SIZES);
+add(14, "ao-thun-gan-tam", "Áo thun gân tăm", "Áo thun nữ", ["new"], "290000", "Vải gân tăm co giãn, ôm vừa người. Cổ tròn nhỏ gọn.", ["Đào", "Xanh mint", "Trắng"], SIZES);
+add(15, "ao-thun-in-chu-soi", "Áo thun in chữ sợi", "Áo thun nữ", [], "350000", "In chữ sợi♡ nhỏ trước ngực. Form suông, mặc thoải mái cả ngày.", ["Kem", "Hồng phấn"], SIZES);
 
-// Quần (8 more → 10)
-addProduct(23, "quan-culottes-linen", "Quần culottes linen", "Pants", ["new"], "590000", "Ống rộng dài qua gối, lưng thun. Mát và bay.", ["Kem", "Hồng"], DRESS);
-addProduct(24, "quan-jean-ong-rong", "Quần jean ống rộng", "Pants", ["bestseller"], "690000", "Denim mềm wash nhạt, ống rộng, lưng cao.", ["Xanh baby", "Trắng"], WAIST);
-addProduct(25, "quan-short-cotton", "Quần short cotton", "Pants", [], "320000", "Short lưng thun có dây rút. Ở nhà hay đi dạo đều thoải mái.", ["Vàng bơ", "Xanh lá nhạt", "Kem"], DRESS);
-addProduct(26, "quan-kaki-ong-dung", "Quần kaki ống đứng", "Pants", [], "560000", "Kaki mềm, ống đứng gọn gàng. Lưng cài nút.", ["Be", "Nâu mocha"], WAIST);
-addProduct(27, "quan-ong-loe", "Quần ống loe", "Pants", ["new"], "620000", "Ống loe nhẹ, vải co giãn. Tôn dáng chân dài.", ["Than chì", "Kem"], WAIST);
-addProduct(28, "quan-ni-jogger", "Quần nỉ jogger", "Pants", [], "450000", "Nỉ da cá mềm, bo gấu. Hợp cho những ngày lười.", ["Xám tro", "Hồng phấn"], TOPS);
-addProduct(29, "quan-lua-ong-suong", "Quần lụa ống suông", "Pants", [], "640000", "Lụa mềm rủ, ống suông. Thanh lịch mà vẫn thoải mái.", ["Sâm panh", "Tím lilac"], DRESS);
-addProduct(30, "quan-short-linen", "Quần short linen", "Pants", [], "380000", "Short linen lưng cao, có đai. Mát cho ngày nắng.", ["Trắng ngà", "Đào"], DRESS);
+// Áo sơ mi nữ
+add(201, "ao-so-mi-trang-basic", "Áo sơ mi trắng basic", "Áo sơ mi nữ", ["bestseller"], "380000", "Sơ mi cotton form suông, cổ đức. Món đồ không thể thiếu trong tủ đồ.", ["Trắng", "Xanh baby"], SIZES);
+add(202, "ao-so-mi-lua-cong-so", "Áo sơ mi lụa công sở", "Áo sơ mi nữ", [], "420000", "Lụa mềm rủ, ít nhăn. Thanh lịch cho ngày đi làm.", ["Trắng ngà", "Sâm panh", "Than chì"], SIZES);
+add(203, "ao-so-mi-ke-soc-oversize", "Áo sơ mi kẻ sọc oversize", "Áo sơ mi nữ", ["new"], "400000", "Kẻ sọc nhỏ, form rộng. Mặc riêng hoặc khoác ngoài áo thun.", ["Xanh baby", "Hồng"], SIZES);
+add(204, "ao-so-mi-croptop", "Áo sơ mi croptop", "Áo sơ mi nữ", [], "350000", "Dáng lửng, cổ đức nhỏ. Hợp với quần và chân váy lưng cao.", ["Trắng", "Đào"], FREE);
+add(205, "ao-so-mi-linen-tay-lo", "Áo sơ mi linen tay lỡ", "Áo sơ mi nữ", [], "390000", "Linen thoáng mát, tay lỡ. Mặc mùa nóng rất dễ chịu.", ["Be", "Xanh lá nhạt"], SIZES);
+add(206, "ao-so-mi-co-sen", "Áo sơ mi cổ sen", "Áo sơ mi nữ", ["new"], "370000", "Cổ sen bo tròn dễ thương, hàng nút nhỏ phía trước.", ["Trắng", "Hồng phấn"], SIZES);
+add(207, "ao-so-mi-tay-phong", "Áo sơ mi tay phồng", "Áo sơ mi nữ", [], "410000", "Tay phồng nhẹ ở vai, cổ đức. Vừa nữ tính vừa gọn gàng.", ["Trắng", "Kem"], SIZES);
+add(208, "ao-so-mi-kaki-tui-hop", "Áo sơ mi kaki túi hộp", "Áo sơ mi nữ", [], "430000", "Kaki mềm, hai túi hộp phía trước. Mặc như áo khoác nhẹ.", ["Be", "Nâu mocha"], SIZES);
+add(209, "ao-so-mi-caro-nho", "Áo sơ mi caro nhỏ", "Áo sơ mi nữ", [], "380000", "Caro nhỏ nhẹ nhàng, form suông dễ mặc.", ["Hồng", "Xanh mint"], SIZES);
+add(210, "ao-so-mi-denim-mem", "Áo sơ mi denim mềm", "Áo sơ mi nữ", ["new"], "450000", "Denim mỏng mềm, wash nhạt. Mặc riêng hoặc khoác ngoài.", ["Xanh baby"], SIZES);
 
-// Vietnamese names for each product_type (collection)
-const TYPE_VI = { Tees: "Áo thun", Dresses: "Đầm", Pants: "Quần" };
-// SKUs stay plain ASCII: strip Vietnamese accents
+// Shopify-style variants: one per Màu × Kích cỡ, each with id / sku / price
 const ascii = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[đĐ]/g, "D").replace(/\s/g, "");
-
-// Build Shopify-style variants: { id, title: "Color / Size", option1, option2, sku, price, available }
 PRODUCTS.forEach((p) => {
+  p.code = `SOI-${p.id}`;
   const [colors, sizes] = p.options.map((o) => o.values);
   p.variants = colors.flatMap((c, ci) => sizes.map((s, si) => ({
     id: p.id * 1000 + ci * 10 + si,
     title: `${c} / ${s}`, option1: c, option2: s,
-    sku: `SOI-${p.id}-${ascii(c).slice(0, 3).toUpperCase()}-${s}`,
+    sku: `${p.code}-${ascii(c).slice(0, 3).toUpperCase()}-${ascii(s).toUpperCase()}`,
     price: p.price, available: true,
   })));
 });
 
-const COLLECTIONS = [
-  { type: "Tees", color: "#f6cfd6" },
-  { type: "Dresses", color: "#ddd0ec" },
-  { type: "Pants", color: "#ebdfcc" },
-];
-const FREE_SHIP = 500000;
-
-/* ---------- Icons (your tee / dress / pants symbols) ---------- */
+/* =====================================================================
+   4. ICONS — hình minh hoạ, dùng khi chưa có ảnh thật
+   ===================================================================== */
 const STROKE = `stroke="#5a4a52" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"`;
 const ICONS = {
-  Tees: (c) => `<svg viewBox="0 0 64 64" fill="${c}" ${STROKE}><path d="M24 8 L12 14 L4 26 L13 31 L17 25 L17 56 L47 56 L47 25 L51 31 L60 26 L52 14 L40 8 C38 13 35 15 32 15 C29 15 26 13 24 8 Z"/></svg>`,
-  Dresses: (c) => `<svg viewBox="0 0 64 64" fill="${c}" ${STROKE}><path d="M25 6 L25 14 C25 18 22 20 22 24 L26 30 L12 56 C24 60 40 60 52 56 L38 30 L42 24 C42 20 39 18 39 14 L39 6 L39 14 C36 17 28 17 25 14 Z"/><path d="M26 30 L38 30" fill="none"/></svg>`,
-  Pants: (c) => `<svg viewBox="0 0 64 64" fill="${c}" ${STROKE}><path d="M16 6 L48 6 L54 58 L39 58 L32 22 L25 58 L10 58 Z"/><path d="M16 12 L48 12" fill="none"/><path d="M32 12 L32 22" fill="none"/></svg>`,
+  tee: (c) => `<svg viewBox="0 0 64 64" fill="${c}" ${STROKE}><path d="M24 8 L12 14 L4 26 L13 31 L17 25 L17 56 L47 56 L47 25 L51 31 L60 26 L52 14 L40 8 C38 13 35 15 32 15 C29 15 26 13 24 8 Z"/></svg>`,
+  blouse: (c) => `<svg viewBox="0 0 64 64" fill="${c}" ${STROKE}><path d="M22 10 C26 16 38 16 42 10 C50 8 58 14 56 24 C52 28 48 27 46 24 L44 40 L52 54 C40 58 24 58 12 54 L20 40 L18 24 C16 27 12 28 8 24 C6 14 14 8 22 10 Z"/><path d="M20 40 C28 42 36 42 44 40" fill="none"/><path d="M28 14 L32 17 L28 20 Z M36 14 L32 17 L36 20 Z"/></svg>`,
+  shirt: (c) => `<svg viewBox="0 0 64 64" fill="${c}" ${STROKE}><path d="M24 8 L12 13 L6 40 L13 42 L18 24 L18 56 L46 56 L46 24 L51 42 L58 40 L52 13 L40 8 Z"/><path d="M24 8 L26 17 L32 18 Z M40 8 L38 17 L32 18 Z"/><path d="M32 18 L32 56" fill="none"/><circle cx="32" cy="26" r="1.3" fill="#5a4a52"/><circle cx="32" cy="34" r="1.3" fill="#5a4a52"/><circle cx="32" cy="42" r="1.3" fill="#5a4a52"/><circle cx="32" cy="50" r="1.3" fill="#5a4a52"/></svg>`,
 };
 
 /* ---------- Helpers ---------- */
 const $ = (id) => document.getElementById(id);
 const vnd = (n) => Number(n).toLocaleString("vi-VN") + "₫";
 const colorsOf = (p) => p.options[0].values;
+const catOf = (p) => CATS.find((c) => c.type === p.product_type);
+const art = (p, color) => ICONS[catOf(p).icon](p.swatches[color] || p.swatches[colorsOf(p)[0]]);
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const findVariant = (id) => {
-  for (const p of PRODUCTS) { const v = p.variants.find((x) => x.id === id); if (v) return { p, v }; }
-};
+const findVariant = (id) => { for (const p of PRODUCTS) { const v = p.variants.find((x) => x.id === id); if (v) return { p, v }; } };
+const zaloHref = () => SHOP.zalo ? `https://zalo.me/${SHOP.zalo.replace(/\D/g, "")}` : "#lien-he";
+const zaloAttrs = (msg) => `href="${zaloHref()}" ${SHOP.zalo ? 'target="_blank" rel="noopener"' : ""} data-copy="${encodeURIComponent(msg || "")}"`;
 
-/* ---------- Announcement ticker ---------- */
-const tickerText = ["Miễn phí giao hàng nội thành TP.HCM cho đơn từ 500.000₫", "Bộ sưu tập hè mới đã lên kệ", "May số lượng nhỏ tại Sài Gòn", "Đổi trả dễ dàng trong 14 ngày"];
+/* ---------- Ticker ---------- */
+const tickerText = ["Bán lẻ & Bán sỉ", "Áo kiểu · Áo thun · Áo sơ mi nữ", "Đặt hàng nhanh qua Zalo", "Shop, người bán online: liên hệ để nhận giá sỉ"];
 $("ticker").innerHTML = [...tickerText, ...tickerText, ...tickerText, ...tickerText].map((t) => `<span>♡ ${t}</span>`).join("");
 
-/* ---------- Hero collage ---------- */
-$("collage").innerHTML = `<div class="blob"></div>` + [
-  { p: PRODUCTS[0], c: "Hồng phấn" }, { p: PRODUCTS[4], c: "Tím lilac" }, { p: PRODUCTS[7], c: "Kem" },
-].map(({ p, c }) => `<div class="tile">${ICONS[p.product_type](p.swatches[c])}</div>`).join("") +
-  `<span class="sparkle s1">✦</span><span class="sparkle s2">✦</span>`;
-
-/* ---------- Collections ---------- */
-$("productTotal").textContent = `${PRODUCTS.length} mẫu`;
-$("collections").innerHTML = COLLECTIONS.map((c) => {
-  const count = PRODUCTS.filter((p) => p.product_type === c.type).length;
-  return `<button class="collection" data-cat="${c.type}">
-    ${ICONS[c.type](c.color)}<span><strong>${TYPE_VI[c.type]}</strong><span class="small">${count} mẫu</span></span>
-  </button>`;
-}).join("");
-
-/* ---------- Product grid ---------- */
-let filter = "all";
-function setFilter(cat, scroll) {
-  filter = cat;
-  document.querySelectorAll(".filter").forEach((b) => b.classList.toggle("active", b.dataset.cat === cat));
-  $("gridTitle").textContent = cat === "all" ? "Tất cả sản phẩm" : TYPE_VI[cat];
-  renderGrid();
-  if (scroll) $("shop").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
-}
-document.querySelectorAll(".filter").forEach((b) => b.addEventListener("click", () => setFilter(b.dataset.cat)));
-$("collections").addEventListener("click", (e) => { const b = e.target.closest("[data-cat]"); if (b) setFilter(b.dataset.cat, true); });
-$("shopNow").addEventListener("click", () => setFilter("all", true));
-
-function renderGrid() {
-  const order = ["Tees", "Dresses", "Pants"];
-  const list = PRODUCTS.filter((p) => filter === "all" || p.product_type === filter)
-    .sort((a, b) => order.indexOf(a.product_type) - order.indexOf(b.product_type));
-  $("productGrid").innerHTML = list.map((p) => {
-    const first = colorsOf(p)[0];
-    const tag = p.tags[0];
-    return `<article class="card">
-      <button class="card-img" data-open="${p.id}" aria-label="Xem ${p.title}">
-        ${tag ? `<span class="badge">${tag === "new" ? "mới ✦" : "được yêu thích ♡"}</span>` : ""}
-        <span class="art">${ICONS[p.product_type](p.swatches[first])}</span>
-        <span class="quick">Xem nhanh</span>
-      </button>
-      <div class="card-row"><h3>${p.title}</h3><span class="price">${vnd(p.price)}</span></div>
-      <div class="dots">${colorsOf(p).map((c) => `<span class="dot" style="background:${p.swatches[c]}" title="${c}"></span>`).join("")}</div>
-    </article>`;
-  }).join("");
+/* ---------- Product card ---------- */
+function card(p) {
+  const first = colorsOf(p)[0];
+  const tag = p.tags[0];
+  const media = p.images[0] ? `<img src="${p.images[0]}" alt="${p.title}" loading="lazy">` : `<span class="art">${art(p, first)}</span>`;
+  return `<a class="card" href="#sp-${p.handle}" data-id="${p.id}">
+    <div class="card-img">${tag ? `<span class="badge">${tag === "new" ? "mới ✦" : "bán chạy ♡"}</span>` : ""}${media}</div>
+    <h3>${p.title}</h3>
+    <span class="price">${vnd(p.price)}</span>
+    <div class="dots">${colorsOf(p).map((c) => `<span class="dot" style="background:${p.swatches[c]}" title="${c}"></span>`).join("")}</div>
+  </a>`;
 }
 
-// Hovering a card gently cycles through its colorways
-let cycleTimer;
-$("productGrid").addEventListener("mouseover", (e) => {
-  const btn = e.target.closest(".card-img");
-  if (!btn || reduceMotion || btn.dataset.cycling) return;
-  document.querySelectorAll("[data-cycling]").forEach((b) => delete b.dataset.cycling);
-  btn.dataset.cycling = "1";
-  const p = PRODUCTS.find((x) => x.id === Number(btn.dataset.open));
-  let i = 0;
-  clearInterval(cycleTimer);
-  cycleTimer = setInterval(() => {
-    i = (i + 1) % colorsOf(p).length;
-    btn.querySelector(".art").innerHTML = ICONS[p.product_type](p.swatches[colorsOf(p)[i]]);
-  }, 800);
-});
-$("productGrid").addEventListener("mouseout", (e) => {
-  const btn = e.target.closest(".card-img");
-  if (!btn || btn.contains(e.relatedTarget)) return;
-  clearInterval(cycleTimer);
-  delete btn.dataset.cycling;
-  const p = PRODUCTS.find((x) => x.id === Number(btn.dataset.open));
-  btn.querySelector(".art").innerHTML = ICONS[p.product_type](p.swatches[colorsOf(p)[0]]);
-});
-$("productGrid").addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-open]");
-  if (btn) openProduct(Number(btn.dataset.open));
-});
+/* ---------- Pages ---------- */
+function homePage() {
+  const newest = PRODUCTS.filter((p) => p.tags.includes("new"));
+  const pick = (cat) => PRODUCTS.filter((p) => p.product_type === cat.type);
+  return `
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="pill">♡ Bán lẻ &amp; Bán sỉ</span>
+        <h1>Mềm mại, xinh xắn, <em>mặc mỗi ngày</em></h1>
+        <p>Áo kiểu, áo thun và áo sơ mi nữ. Mua lẻ từng chiếc hoặc lấy sỉ cho shop của bạn.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-rose" href="#hang-moi">Mua lẻ ♡</a>
+          <a class="btn btn-soft" href="#ban-si">Mua sỉ</a>
+        </div>
+      </div>
+      <div class="collage">
+        <div class="blob"></div>
+        <div class="tile">${ICONS.blouse("#f6cfd6")}</div>
+        <div class="tile">${ICONS.shirt("#ffffff")}</div>
+        <div class="tile">${ICONS.tee("#ddd0ec")}</div>
+        <span class="sparkle s1">✦</span><span class="sparkle s2">✦</span>
+      </div>
+    </div>
+  </section>
 
-/* ---------- Product quick view ---------- */
-function openProduct(id) {
-  const p = PRODUCTS.find((x) => x.id === id);
-  let color = colorsOf(p)[0];
-  let size = null;
+  <section class="wrap">
+    <div class="modes">
+      <a class="mode" href="#hang-moi"><strong>Bán lẻ</strong><span>Chọn mẫu, thêm vào giỏ và gửi đơn qua Zalo.</span></a>
+      <a class="mode" href="#ban-si"><strong>Bán sỉ</strong><span>Dành cho shop và người bán online. Liên hệ để nhận giá sỉ.</span></a>
+    </div>
+  </section>
 
+  <section class="wrap" id="hang-moi">
+    <div class="section-head"><h2>Hàng mới về<span class="sub">New arrivals</span></h2></div>
+    <div class="row-scroll">${newest.map(card).join("")}</div>
+  </section>
+
+  ${CATS.map((cat) => {
+    const list = pick(cat);
+    return `<section class="wrap">
+      <div class="section-head"><h2>${cat.type}<span class="sub">${cat.en}</span></h2><a class="link" href="#${cat.slug}">Xem tất cả ${list.length} mẫu →</a></div>
+      <div class="grid">${list.slice(0, 4).map(card).join("")}</div>
+    </section>`;
+  }).join("")}
+
+  <section class="wrap">
+    <div class="ws-banner">
+      <div>
+        <span class="small">Bán sỉ</span>
+        <h2>Lấy sỉ cho shop của bạn</h2>
+        <p>Nhận đơn sỉ cho shop thời trang và người bán online. Liên hệ để nhận giá sỉ và số lượng đặt tối thiểu.</p>
+      </div>
+      <div class="ws-actions">
+        <a class="btn btn-zalo" ${zaloAttrs("Chào shop, mình muốn hỏi giá sỉ và số lượng đặt tối thiểu.")}>Nhắn Zalo hỏi giá sỉ</a>
+        <a class="btn btn-ink" href="#ban-si">Xem thông tin bán sỉ</a>
+      </div>
+    </div>
+  </section>
+
+  ${contactSection()}`;
+}
+
+function contactSection() {
+  return `<section class="wrap contact" id="lien-he">
+    <div>
+      <h2>Liên hệ đặt hàng</h2>
+      <p>Cách nhanh nhất để đặt hàng hoặc hỏi giá sỉ là nhắn tin Zalo cho shop. Gửi kèm tên hoặc mã sản phẩm (ví dụ SOI-101) để được trả lời nhanh hơn.</p>
+      <a class="btn btn-zalo" ${zaloAttrs("Chào shop, mình muốn đặt hàng.")}>Nhắn Zalo cho shop</a>
+    </div>
+    <dl class="info">
+      <div><dt>Zalo</dt><dd>${SHOP.zalo ? SHOP.zalo + (SHOP.zaloName ? " · " + SHOP.zaloName : "") : TODO}</dd></div>
+      <div><dt>Giờ làm việc</dt><dd>${SHOP.hours || TODO}</dd></div>
+      <div><dt>Địa chỉ</dt><dd>${SHOP.address || TODO}</dd></div>
+      <div><dt>Hình thức</dt><dd>Bán lẻ &amp; Bán sỉ</dd></div>
+    </dl>
+  </section>`;
+}
+
+function categoryPage(cat) {
+  const list = PRODUCTS.filter((p) => p.product_type === cat.type);
+  return `<section class="wrap">
+    <nav class="crumbs" aria-label="Đường dẫn"><a href="#">Trang chủ</a><span>/</span><span>${cat.type}</span></nav>
+    <div class="section-head" style="padding-top:16px"><h2>${cat.type}<span class="sub">${cat.en} · ${list.length} mẫu</span></h2><a class="link" href="#ban-si">Mua sỉ? Xem tại đây →</a></div>
+    <div class="grid all">${list.map(card).join("")}</div>
+  </section>`;
+}
+
+function wholesalePage() {
+  return `<section class="wrap">
+    <nav class="crumbs" aria-label="Đường dẫn"><a href="#">Trang chủ</a><span>/</span><span>Bán sỉ</span></nav>
+    <div class="ws-head">
+      <span class="pill">Bán sỉ · Wholesale</span>
+      <h1>Lấy sỉ áo nữ cho shop của bạn</h1>
+      <p>Shop nhận đơn sỉ áo kiểu, áo thun nữ và áo sơ mi nữ cho cửa hàng thời trang và người bán online. Liên hệ chúng tôi để nhận giá sỉ và số lượng đặt tối thiểu.</p>
+      <a class="btn btn-zalo" ${zaloAttrs("Chào shop, mình muốn hỏi giá sỉ và số lượng đặt tối thiểu.")}>Nhắn Zalo hỏi giá sỉ</a>
+    </div>
+
+    <div class="section-head"><h2>Cách đặt hàng sỉ</h2></div>
+    <ol class="steps">
+      <li><strong>Chọn mẫu</strong><span>Xem các mẫu trên website và ghi lại mã sản phẩm, ví dụ SOI-101.</span></li>
+      <li><strong>Nhắn Zalo cho shop</strong><span>Gửi mã sản phẩm, màu, size và số lượng bạn cần.</span></li>
+      <li><strong>Nhận báo giá sỉ</strong><span>Shop báo giá sỉ, số lượng đặt tối thiểu và thời gian giao hàng.</span></li>
+    </ol>
+
+    <div class="section-head"><h2>Giá sỉ &amp; số lượng tối thiểu</h2></div>
+    <div class="ws-box" style="margin-top:0">
+      <strong>Liên hệ để nhận báo giá</strong>
+      <p>Liên hệ chúng tôi để nhận giá sỉ và số lượng đặt tối thiểu. Giá sỉ <span class="todo">đang cập nhật</span> trên website.</p>
+    </div>
+
+    <div class="section-head"><h2>Danh mục bán sỉ</h2></div>
+    <div class="ws-cats">${CATS.map((c) => `<a class="ws-cat" href="#${c.slug}">${ICONS[c.icon](c.color)}<span><strong>${c.type}</strong><span>${PRODUCTS.filter((p) => p.product_type === c.type).length} mẫu · Xem tất cả →</span></span></a>`).join("")}</div>
+  </section>
+  ${contactSection()}`;
+}
+
+function productPage(p) {
+  const cat = catOf(p);
+  return `<section class="wrap">
+    <nav class="crumbs" aria-label="Đường dẫn"><a href="#">Trang chủ</a><span>/</span><a href="#${cat.slug}">${cat.type}</a><span>/</span><span>${p.title}</span></nav>
+    <div class="pdp" id="pdp"></div>
+  </section>`;
+}
+
+/* Product page body: re-renders when color / size / photo changes */
+function mountProduct(p) {
+  let color = colorsOf(p)[0], size = null, shot = 0;
   const render = () => {
     const variant = size && p.variants.find((v) => v.option1 === color && v.option2 === size);
-    $("modalBody").innerHTML = `
-      <div class="modal-img">${ICONS[p.product_type](p.swatches[color])}</div>
-      <div class="modal-info">
-        <span class="label">${TYPE_VI[p.product_type]}</span>
-        <h2>${p.title}</h2>
-        <span class="price">${vnd(p.price)}</span>
-        <p>${p.body_html}</p>
+    const photos = p.images.length
+      ? p.images.map((src, i) => ({ html: `<img src="${src}" alt="${p.title} ảnh ${i + 1}">` }))
+      : colorsOf(p).map((c) => ({ html: art(p, c), color: c }));
+    if (!p.images.length) shot = colorsOf(p).indexOf(color);
+    const orderMsg = `Chào shop, mình muốn đặt: ${p.title} (${p.code}) - Màu: ${color} - Size: ${size || "chưa chọn"} - Giá lẻ: ${vnd(p.price)}`;
+    $("pdp").innerHTML = `
+      <div class="gallery">
+        <div class="main-img">${photos[shot].html}${p.images.length ? "" : `<span class="ph-note">Ảnh minh hoạ · thay bằng ảnh thật</span>`}</div>
+        <div class="thumbs">${photos.map((ph, i) => `<button class="thumb ${i === shot ? "selected" : ""}" data-shot="${i}" ${ph.color ? `data-color="${ph.color}"` : ""} aria-label="Ảnh ${i + 1}">${ph.html}</button>`).join("")}</div>
+      </div>
+      <div class="buy">
+        <span class="small">${p.product_type}</span>
+        <h1>${p.title}</h1>
+        <span class="code">Mã sản phẩm: ${p.code}</span>
+        <div class="retail"><strong>${vnd(p.price)}</strong><span>Giá lẻ</span></div>
+
         <span class="label">Màu · ${color}</span>
-        <div class="options">${colorsOf(p).map((c) =>
-          `<button class="swatch ${c === color ? "selected" : ""}" style="background:${p.swatches[c]}" data-color="${c}" aria-label="${c}"></button>`).join("")}</div>
+        <div class="options">${colorsOf(p).map((c) => `<button class="swatch ${c === color ? "selected" : ""}" style="background:${p.swatches[c]}" data-color="${c}" aria-label="${c}" title="${c}"></button>`).join("")}</div>
+
         <span class="label">Kích cỡ</span>
-        <div class="options">${p.options[1].values.map((s) =>
-          `<button class="size ${s === size ? "selected" : ""}" data-size="${s}">${s}</button>`).join("")}</div>
-        <button class="primary" id="addToCart" ${variant ? "" : "disabled"}>${variant ? "Thêm vào giỏ ♡ " + vnd(variant.price) : "Chọn kích cỡ"}</button>
-        ${variant ? `<span class="sku">SKU ${variant.sku}</span>` : ""}
+        <div class="options">${p.options[1].values.map((s) => `<button class="size ${s === size ? "selected" : ""}" data-size="${s}">${s}</button>`).join("")}</div>
+
+        <span class="label">Mô tả</span>
+        <p class="desc">${p.body_html}</p>
+
+        <div class="buy-actions">
+          <button class="btn btn-ink" id="addToCart" ${variant ? "" : "disabled"}>${variant ? "Thêm vào giỏ" : "Chọn size để thêm"}</button>
+          <a class="btn btn-zalo" ${zaloAttrs(orderMsg)}>Đặt hàng qua Zalo</a>
+        </div>
+
+        <div class="ws-box">
+          <strong>Mua sỉ mẫu này?</strong>
+          <p>Liên hệ chúng tôi để nhận giá sỉ và số lượng đặt tối thiểu.</p>
+          <a class="btn btn-soft" ${zaloAttrs(`Chào shop, mình muốn hỏi giá sỉ mẫu ${p.title} (${p.code}).`)}>Liên hệ giá sỉ</a>
+          <a class="link" href="#ban-si">Xem thông tin bán sỉ →</a>
+        </div>
       </div>`;
   };
-
-  $("modalBody").onclick = (e) => {
+  $("pdp").onclick = (e) => {
     const t = e.target.closest("button");
     if (!t) return;
     if (t.dataset.color) { color = t.dataset.color; render(); }
+    else if (t.dataset.shot) { shot = Number(t.dataset.shot); render(); }
     else if (t.dataset.size) { size = t.dataset.size; render(); }
     else if (t.id === "addToCart") {
       const v = p.variants.find((x) => x.option1 === color && x.option2 === size);
-      addToCart(v.id, 1);
-      $("productModal").close();
+      if (v) addToCart(v.id, 1);
     }
   };
   render();
-  $("productModal").showModal();
 }
-$("modalClose").addEventListener("click", () => $("productModal").close());
-$("productModal").addEventListener("click", (e) => { if (e.target === $("productModal")) $("productModal").close(); });
+
+/* ---------- Router: #ao-kieu, #ao-thun, #ao-so-mi, #ban-si, #sp-<handle> ---------- */
+function route() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  const cat = CATS.find((c) => c.slug === h);
+  const product = h.startsWith("sp-") && PRODUCTS.find((p) => p.handle === h.slice(3));
+  let current = "";
+  if (product) { $("app").innerHTML = productPage(product); mountProduct(product); current = catOf(product).slug; }
+  else if (cat) { $("app").innerHTML = categoryPage(cat); current = cat.slug; }
+  else if (h === "ban-si") { $("app").innerHTML = wholesalePage(); current = "ban-si"; }
+  else { $("app").innerHTML = homePage(); }
+  document.querySelectorAll("#nav a").forEach((a) => a.classList.toggle("active", a.dataset.route === current));
+  const target = h && !product && !cat && h !== "ban-si" && document.getElementById(h);
+  if (target) target.scrollIntoView({ behavior: "auto" }); else window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+
+/* ---------- Hover: cycle a card through its colors ---------- */
+let cycleTimer;
+document.addEventListener("mouseover", (e) => {
+  const c = e.target.closest(".card");
+  if (!c || reduceMotion || c.dataset.cycling) return;
+  const p = PRODUCTS.find((x) => x.id === Number(c.dataset.id));
+  if (!p || p.images.length || colorsOf(p).length < 2) return;
+  document.querySelectorAll("[data-cycling]").forEach((b) => delete b.dataset.cycling);
+  c.dataset.cycling = "1";
+  let i = 0;
+  clearInterval(cycleTimer);
+  cycleTimer = setInterval(() => { i = (i + 1) % colorsOf(p).length; c.querySelector(".art").innerHTML = art(p, colorsOf(p)[i]); }, 800);
+});
+document.addEventListener("mouseout", (e) => {
+  const c = e.target.closest(".card");
+  if (!c || !c.dataset.cycling || c.contains(e.relatedTarget)) return;
+  clearInterval(cycleTimer);
+  delete c.dataset.cycling;
+  const p = PRODUCTS.find((x) => x.id === Number(c.dataset.id));
+  c.querySelector(".art").innerHTML = art(p, colorsOf(p)[0]);
+});
+
+/* ---------- Zalo buttons: copy the message, then open Zalo ---------- */
+document.addEventListener("click", (e) => {
+  const a = e.target.closest("[data-copy]");
+  if (!a) return;
+  const msg = decodeURIComponent(a.dataset.copy || "");
+  if (!SHOP.zalo) { showToast("Số Zalo của shop đang được cập nhật"); if (location.hash === "#lien-he") { e.preventDefault(); $("lien-he")?.scrollIntoView(); } closeCart(); return; }
+  if (msg && navigator.clipboard) {
+    navigator.clipboard.writeText(msg).then(() => showToast("Đã sao chép nội dung. Dán vào Zalo để gửi cho shop ♡")).catch(() => {});
+  }
+});
 
 /* =====================================================================
    CART — lines are { variant_id, quantity }, same as Shopify's cart.
    In a Shopify theme, replace addToCart / setQty with:
      fetch('/cart/add.js',    { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ items:[{ id: variantId, quantity }] }) })
      fetch('/cart/change.js', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id: variantId, quantity }) })
-   and Checkout → window.location = '/checkout'
    ===================================================================== */
 let cart = [];
-try { cart = JSON.parse(localStorage.getItem("soi-cart-v4")) || []; } catch { cart = []; }
-const saveCart = () => { try { localStorage.setItem("soi-cart-v4", JSON.stringify(cart)); } catch {} };
+try { cart = JSON.parse(localStorage.getItem("soi-cart-v5")) || []; } catch { cart = []; }
+const saveCart = () => { try { localStorage.setItem("soi-cart-v5", JSON.stringify(cart)); } catch {} };
 
 function addToCart(variantId, quantity) {
   const line = cart.find((l) => l.variant_id === variantId);
   if (line) line.quantity += quantity; else cart.push({ variant_id: variantId, quantity });
   saveCart(); renderCart();
-  const { p } = findVariant(variantId);
-  showToast(`Đã thêm ${p.title} ♡`);
+  showToast(`Đã thêm ${findVariant(variantId).p.title} vào giỏ ♡`);
   $("cartBtn").classList.remove("bump"); void $("cartBtn").offsetWidth; $("cartBtn").classList.add("bump");
 }
 function setQty(variantId, quantity) {
@@ -513,18 +678,22 @@ function renderCart() {
   const total = cart.reduce((n, l) => n + l.quantity * Number(findVariant(l.variant_id).v.price), 0);
   $("cartCount").textContent = count;
   $("cartTotal").textContent = vnd(total);
-  $("checkoutBtn").disabled = count === 0;
 
-  const left = FREE_SHIP - total;
-  $("progress").innerHTML = (left > 0 ? `Mua thêm <b>${vnd(left)}</b> để được miễn phí giao hàng nội thành TP.HCM` : `<b>Yay, bạn được miễn phí giao hàng ♡</b>`) +
-    `<div class="bar"><i style="width:${Math.min(100, (total / FREE_SHIP) * 100)}%"></i></div>`;
+  const lines = cart.map((l) => { const { p, v } = findVariant(l.variant_id); return `- ${p.title} (${p.code}) · ${v.title} · SL ${l.quantity}`; });
+  const msg = `Chào shop, mình muốn đặt hàng:\n${lines.join("\n")}\nTạm tính: ${vnd(total)}`;
+  const btn = $("checkoutBtn");
+  btn.setAttribute("href", count ? zaloHref() : "#");
+  btn.dataset.copy = encodeURIComponent(msg);
+  if (SHOP.zalo) { btn.target = "_blank"; btn.rel = "noopener"; }
+  btn.style.opacity = count ? "" : ".4";
+  btn.style.pointerEvents = count ? "" : "none";
 
   $("cartItems").innerHTML = cart.length === 0
     ? `<li class="empty">Giỏ hàng đang trống ♡</li>`
     : cart.map((l) => {
         const { p, v } = findVariant(l.variant_id);
         return `<li class="cart-item">
-          <div class="cart-thumb">${ICONS[p.product_type](p.swatches[v.option1])}</div>
+          <div class="cart-thumb">${p.images[0] ? `<img src="${p.images[0]}" alt="">` : art(p, v.option1)}</div>
           <div class="cart-meta">${p.title}<small>${v.title} · ${vnd(v.price)}</small></div>
           <div class="qty">
             <button data-id="${v.id}" data-q="${l.quantity - 1}" aria-label="Giảm">−</button>
@@ -540,14 +709,16 @@ $("cartItems").addEventListener("click", (e) => {
 });
 
 const openCart = () => { $("cartDrawer").hidden = false; $("overlay").hidden = false; };
-const closeCart = () => { $("cartDrawer").hidden = true; $("overlay").hidden = true; };
+function closeCart() { $("cartDrawer").hidden = true; $("overlay").hidden = true; }
 $("cartBtn").addEventListener("click", openCart);
 $("drawerClose").addEventListener("click", closeCart);
 $("overlay").addEventListener("click", closeCart);
-$("checkoutBtn").addEventListener("click", () => {
-  cart = []; saveCart(); renderCart(); closeCart();
-  showToast("Đặt hàng thành công ♡ (bản demo, không thu tiền)");
-});
+
+/* ---------- Floating Zalo ---------- */
+const zf = $("zaloFloat");
+zf.setAttribute("href", zaloHref());
+zf.dataset.copy = encodeURIComponent("Chào shop, mình muốn hỏi về sản phẩm.");
+if (SHOP.zalo) { zf.target = "_blank"; zf.rel = "noopener"; }
 
 /* ---------- Toast ---------- */
 let toastTimer;
@@ -555,9 +726,9 @@ function showToast(msg) {
   $("toast").textContent = msg;
   $("toast").classList.add("show");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2000);
+  toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2600);
 }
 
-renderGrid();
+route();
 renderCart();
 </script>
